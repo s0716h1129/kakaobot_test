@@ -1,16 +1,29 @@
-var boss_1 = [];
-var boss_2 = [];
-var boss_3 = [];
-var boss_4 = [];
-var boss_5 = [];
+var boss_1 = {};
+var boss_2 = {};
+var boss_3 = {};
+var boss_4 = {};
+var boss_5 = {};
+var res_list = [];
 
-var guide = ["예약하기 : !예약 / 네임드",
-			 "이월예약하기 : !이월예약 / 네임드",
-			 "예약 현황 보기 : !현황",
-			 "참전 후 끝 : !끝",
-			 "예약 취소 하기 : !취소",
-			 "이월 참전 후 끝 : !이월끝",
-			 "이월예약 취소 하기 : !이월취소",
+var guide = ["* / 앞뒤로 띄어쓰기 하면 작동 안할수도 있습니다.",
+			 "예약 현황 보기 : !현황 \n",
+
+			 "예약하기 : !예약 / 네임드 / 딜량",
+			 "참전 완료 : !끝",
+			 "예약 취소 : !취소 \n",
+
+			 "이월 예약 : !이월예약 / 네임드 / 딜량",
+			 "이월 참전 완료 : !이월끝",
+			 "이월 예약 취소 : !이월취소 \n",
+
+			 "(다른 사람의 것으로 참전 할 경우 사용, 닉네임은 카톡 닉네임과 똑같이 쓸 것!!!)",
+			 "대리 예약 : !2예약 / 해 줄 사람 카톡 닉네임 / 네임드 / 딜량",
+			 "대리 예약 끝 : !2끝 / 해 줄 사람 카톡 닉네임",
+			 "대리 예약 취소 : !2취소 / 해 줄 사람 카톡 닉네임 \n",
+
+			 "대리 이월 예약 : !2이월예약 / 해 줄 사람 카톡 닉네임 / 네임드 / 딜량",
+			 "대리 이월 예약 끝 : !2이월끝 / 해 줄 사람 카톡 닉네임",
+			 "대리 이월 예약 취소 : !2이월취소 / 해 줄 사람 카톡 닉네임 \n"
 			];
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName) {
@@ -19,209 +32,410 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName)
 		replier.reply(guide.join("\n"));
 	}
 
-	//예약
+	// 예약
 	if (msg.indexOf("!예약") == 0) {
-		if (msg == "!예약") {
+		if (msg.split("/")[1] === null || msg.split("/")[1] === undefined || msg.split("/")[2] === null || msg.split("/")[2] === undefined) {
 			replier.reply("예약실패");
-		} else {		
-			//예약 중복 방지
-			var u_overlap = 0;
-			var damage = " ";
-			
-			for (i=0; i<boss_1.length; i++){
-				if (boss_1[i] == sender) {
-					u_overlap = 1;
-				}
-			}
-			for (i=0; i<boss_2.length; i++){
-				if (boss_2[i] == sender) {
-					u_overlap = 1;
-				}
-			}
-			for (i=0; i<boss_3.length; i++){
-				if (boss_3[i] == sender) {
-					u_overlap = 1;
-				}
-			}
-			for (i=0; i<boss_4.length; i++){
-				if (boss_4[i] == sender) {
-					u_overlap = 1;
-				}
-			}
-			for (i=0; i<boss_5.length; i++){
-				if (boss_5[i] == sender) {
-					u_overlap = 1;
-				}
-			}
-
-			if (u_overlap==1) {
-				replier.reply("이미 예약중입니다.");
-			} else {
-				if (msg.split("/")[1].indexOf("1") == 0 || msg.split("/")[1].indexOf("1") == 1) {
-					//1 네임드 
-					boss_1.push (sender);
-					replier.reply(sender + msg.split("/")[1] + " 예약완료");
-				} else if (msg.split("/")[1].indexOf("2") == 0 || msg.split("/")[1].indexOf("2") == 1) {
-					//2 네임드 
-					boss_2.push (sender);
-					replier.reply(sender + msg.split("/")[1] + " 예약완료");
-				} else if (msg.split("/")[1].indexOf("3") == 0 || msg.split("/")[1].indexOf("3") == 1) {
-					//3 네임드 
-					boss_3.push (sender);
-					replier.reply(sender + msg.split("/")[1] + " 예약완료");
-				} else if (msg.split("/")[1].indexOf("4") == 0 || msg.split("/")[1].indexOf("4") == 1) {
-					//4 네임드 
-					boss_4.push (sender);
-					replier.reply(sender + msg.split("/")[1] + " 예약완료");
-				} else if (msg.split("/")[1].indexOf("5") == 0 || msg.split("/")[1].indexOf("5") == 1) {
-					//5 네임드 
-					boss_5.push (sender);
-					replier.reply(sender + msg.split("/")[1] + " 예약완료");
-				} else {
-					// 예약실패
-					replier.reply("예약실패");
-				}  
-			}
-		}
-	}
-
-	//이월예약 
-	if (msg.indexOf("!이월예약") == 0) {
-		if (msg == "!이월예약") {
-			replier.reply("이월예약실패");
+			replier.reply("사용법을 확인해주세요.");
 		} else {
-			if (msg.split("/")[1].indexOf("1") == 0 || msg.split("/")[1].indexOf("1") == 1) {
-				//1 네임드 
-				boss_1.push ("이월_" + sender);
-				replier.reply("이월_" + sender + msg.split("/")[1] + "이월예약완료");
-			} else if (msg.split("/")[1].indexOf("2") == 0 || msg.split("/")[1].indexOf("2") == 1) {
-				//2 네임드 
-				boss_2.push ("이월_" + sender);
-				replier.reply("이월_" + sender + msg.split("/")[1] + "이월예약완료");
-			} else if (msg.split("/")[1].indexOf("3") == 0 || msg.split("/")[1].indexOf("3") == 1) {
-				//3 네임드 
-				boss_3.push ("이월_" + sender);
-				replier.reply("이월_" + sender + msg.split("/")[1] + "이월예약완료");
-			} else if (msg.split("/")[1].indexOf("4") == 0 || msg.split("/")[1].indexOf("4") == 1) {
-				//4 네임드 
-				boss_4.push ("이월_" + sender);
-				replier.reply("이월_" + sender + msg.split("/")[1] + "이월예약완료");
-			} else if (msg.split("/")[1].indexOf("5") == 0 || msg.split("/")[1].indexOf("5") == 1) {
-				//5 네임드 
-				boss_5.push ("이월_" + sender);
-				replier.reply("이월_" + sender + msg.split("/")[1] + "이월예약완료");
+			var u_overlap = 0;
+
+			// 예약 중복 방지
+
+			for (i=0; i<res_list.length; i++){
+				if (res_list[i] == sender) {
+					u_overlap = 1;
+				}
+			}
+
+			if (u_overlap == 1) {
+				replier.reply("이미 예약 중입니다.");
 			} else {
-				// 예약실패
-				replier.reply("이월예약실패");
-			}  
+				switch(msg.split("/")[1]) {
+					case "1" :
+						boss_1[sender] = msg.split("/")[2];
+						res_list.push(sender);
+						replier.reply(sender + " 1넴 예약완료");
+
+						break;
+
+					case "2" :
+						boss_2[sender] = msg.split("/")[2];
+						res_list.push(sender);
+						replier.reply(sender + " 2넴 예약완료");
+
+						break;
+
+					case "3" :
+						boss_3[sender] = msg.split("/")[2];
+						res_list.push(sender);
+						replier.reply(sender + " 3넴 예약완료");
+
+						break;
+
+					case "4" :
+						boss_4[sender] = msg.split("/")[2];
+						res_list.push(sender);
+						replier.reply(sender + " 4넴 예약완료");
+
+						break;
+
+					case "5" :
+						boss_5[sender] = msg.split("/")[2];
+						res_list.push(sender);
+						replier.reply(sender + " 5넴 예약완료");
+
+						break;
+					
+					default:
+						replier.reply("예약실패, 네임드 숫자를 확인해주세요.");
+				}
+			}
 		}
 	}
 
-	//예약 현황 보기
+	// 예약 현황 보기
 	if (msg == "!현황") {
-		replier.reply("예약현황 \n1넴 \n" + boss_1.join(", ") + "\n\n2넴 \n" + boss_2.join(", ")+ "\n\n3넴 \n" + boss_3.join(", ")+ "\n\n4넴 \n" + boss_4.join(", ")+ "\n\n5넴 \n" + boss_5.join(", "));
-	}
+		var b1_list = "";
+		var b2_list = "";
+		var b3_list = "";
+		var b4_list = "";
+		var b5_list = "";
 
-	// 초기화
-	if (msg == "!초기화") {
-		for (var i = boss_1.length; i>0; i--){
-			boss_1.pop();
+		for (key in boss_1) {
+			b1_list = b1_list + key + " (" + boss_1[key] + "), ";
 		}
-		for (var i = boss_2.length; i>0; i--){
-			boss_2.pop();
+		for (key in boss_2) {
+			b2_list = b2_list + key + " (" + boss_2[key] + "), ";
 		}
-		for (var i = boss_3.length; i>0; i--){
-			boss_3.pop();
+		for (key in boss_3) {
+			b3_list = b3_list + key + " (" + boss_3[key] + "), ";
 		}
-		for (var i = boss_4.length; i>0; i--){
-			boss_4.pop();
+		for (key in boss_4) {
+			b4_list = b4_list + key + " (" + boss_4[key] + "), ";
 		}
-		for (var i = boss_5.length; i>0; i--){
-			boss_5.pop();
+		for (key in boss_5) {
+			b5_list = b5_list + key + " (" + boss_5[key] + "), ";
 		}
-		replier.reply("초기화 완료");
+
+		if (msg.split("/")[1] === null || msg.split("/")[1] === undefined) {
+		}
+
+		replier.reply("예약현황 \n1넴 \n" + b1_list + "\n\n2넴 \n" + b2_list + "\n\n3넴 \n" + b3_list + "\n\n4넴 \n" + b4_list + "\n\n5넴 \n" + b5_list);
 	}
 
 	//끝 and 취소
 	if (msg == "!끝" || msg == "!취소") {
-		var m = 0;
-		for (i=0; i<boss_1.length; i++){
-			if (boss_1[i] == sender) {
-				boss_1.splice(boss_1.indexOf(sender),1);
-				m = 1;
-			}
-		}
-		for (i=0; i<boss_2.length; i++){
-			if (boss_2[i] == sender) {
-				boss_2.splice(boss_2.indexOf(sender),1);
-				m = 2;
-			}
-		}
-		for (i=0; i<boss_3.length; i++){
-			if (boss_3[i] == sender) {
-				boss_3.splice(boss_3.indexOf(sender),1);
-				m = 3;
-			}
-		}
-		for (i=0; i<boss_4.length; i++){
-			if (boss_4[i] == sender) {
-				boss_4.splice(boss_4.indexOf(sender),1);
-				m = 4;
-			}
-		}
-		for (i=0; i<boss_5.length; i++){
-			if (boss_5[i] == sender) {
-				boss_5.splice(boss_5.indexOf(sender),1);
-				m = 5;
+		var k = 0;
+
+		for(i=0; i<res_list.length; i++){
+			if (res_list[i]==sender){
+				k=1;
 			}
 		}
 
-		if (m == 0) {
-			replier.reply(sender + " 예약 없음");
+		if (k==1){
+			delete boss_1[sender];
+			delete boss_2[sender];
+			delete boss_3[sender];
+			delete boss_4[sender];
+			delete boss_5[sender];
+
+			res_list.splice(res_list.indexOf(sender),1);
+
+			if (msg == "!끝") {
+				replier.reply(sender + " 참전 완료");
+			} else if (msg == "!취소"){
+				replier.reply(sender + " 예약 취소");
+			}
 		} else {
-			replier.reply(sender + m + "넴 " + " 예약 삭제 완료");
+			replier.reply("예약이 되어있지 않습니다.");
 		}
 	}
 
-	//이월 끝 and 이월 취소
+	// 이월 예약
+	if (msg.indexOf("!이월예약") == 0) {
+		if (msg.split("/")[1] === null || msg.split("/")[1] === undefined || msg.split("/")[2] === null || msg.split("/")[2] === undefined) {
+			replier.reply("예약실패");
+			replier.reply("사용법을 확인해주세요.");
+		} else {
+			var u_overlap = 0;
+
+			// 예약 중복 방지
+
+			for (i=0; i<res_list.length; i++){
+				if (res_list[i] == "이월_" + sender) {
+					u_overlap = 1;
+				}
+			}
+
+			if (u_overlap == 1) {
+				replier.reply("이미 예약 중입니다.");
+			} else {
+				switch(msg.split("/")[1]) {
+					case "1" :
+						boss_1["이월_" + sender] = msg.split("/")[2];
+						res_list.push("이월_" + sender);
+						replier.reply(sender + " 1넴 이월예약완료");
+
+						break;
+
+					case "2" :
+						boss_2["이월_" + sender] = msg.split("/")[2];
+						res_list.push("이월_" + sender);
+						replier.reply(sender + " 2넴 이월예약완료");
+
+						break;
+
+					case "3" :
+						boss_3["이월_" + sender] = msg.split("/")[2];
+						res_list.push("이월_" + sender);
+						replier.reply(sender + " 3넴 이월예약완료");
+
+						break;
+
+					case "4" :
+						boss_4["이월_" + sender] = msg.split("/")[2];
+						res_list.push("이월_" + sender);
+						replier.reply(sender + " 4넴 이월예약완료");
+
+						break;
+
+					case "5" :
+						boss_5["이월_" + sender] = msg.split("/")[2];
+						res_list.push("이월_" + sender);
+						replier.reply(sender + " 5넴 이월예약완료");
+
+						break;
+					
+					default:
+						replier.reply("예약실패, 네임드 숫자를 확인해주세요.");
+				}
+			}
+		}
+	}
+
+	// 이월 끝 and 취소
 	if (msg == "!이월끝" || msg == "!이월취소") {
-		var m = 0;
-		var sender1 = "이월_" + sender;
-		for (i=0; i<boss_1.length; i++){
-			if (boss_1[i] == sender1) {
-				boss_1.splice(boss_1.indexOf("이월_" + sender),1);
-				m = 1;
-			}
-		}
-		for (i=0; i<boss_2.length; i++){
-			if (boss_2[i] == sender1) {
-				boss_2.splice(boss_2.indexOf("이월_" + sender),1);
-				m = 2;
-			}
-		}
-		for (i=0; i<boss_3.length; i++){
-			if (boss_3[i] == sender1) {
-				boss_3.splice(boss_3.indexOf("이월_" + sender),1);
-				m = 3;
-			}
-		}
-		for (i=0; i<boss_4.length; i++){
-			if (boss_4[i] == sender1) {
-				boss_4.splice(boss_4.indexOf("이월_" + sender),1);
-				m = 4;
-			}
-		}
-		for (i=0; i<boss_5.length; i++){
-			if (boss_5[i] == sender1) {
-				boss_5.splice(boss_5.indexOf("이월_" + sender),1);
-				m = 5;
+		var k = 0;
+
+		for(i=0; i<res_list.length; i++){
+			if (res_list[i]=="이월_" + sender){
+				k=1;
 			}
 		}
 
-		if (m == 0) {
-			replier.reply(sender + " 이월예약 없음");
+		if (k==1){
+			delete boss_1["이월_" + sender];
+			delete boss_2["이월_" + sender];
+			delete boss_3["이월_" + sender];
+			delete boss_4["이월_" + sender];
+			delete boss_5["이월_" + sender];
+
+			res_list.splice(res_list.indexOf("이월_" + sender),1);
+
+			if (msg == "!이월끝") {
+				replier.reply(sender + "이월 참전 완료");
+			} else if (msg == "!이월취소"){
+				replier.reply(sender + "이월 예약 취소");
+			}
 		} else {
-			replier.reply(sender + " " + m + "넴 " + "이월예약 삭제 완료");
+			replier.reply("예약이 되어있지 않습니다.");
 		}
 	}
+	
+
+	// 대신 예약해주기
+	if (msg.indexOf("!2예약") == 0) {
+		if (msg.split("/")[1] === null || msg.split("/")[1] === undefined || msg.split("/")[2] === null || msg.split("/")[2] === undefined || msg.split("/")[3] === null || msg.split("/")[3] === undefined) {
+			replier.reply("예약실패");
+			replier.reply("사용법을 확인해주세요.");
+		} else {
+			var u_overlap = 0;
+
+			// 예약 중복 방지
+
+			for (i=0; i<res_list.length; i++){
+				if (res_list[i] == msg.split("/")[1]) {
+					u_overlap = 1;
+				}
+			}
+
+			if (u_overlap == 1) {
+				replier.reply("이미 예약 중입니다.");
+			} else {
+				switch(msg.split("/")[2]) {
+					case "1" :
+						boss_1[msg.split("/")[1]] = msg.split("/")[3] + " " + sender;
+						res_list.push(msg.split("/")[1]);
+						replier.reply(msg.split("/")[1] + " 1넴 예약완료");
+
+						break;
+
+					case "2" :
+						boss_2[msg.split("/")[1]] = msg.split("/")[3] + " " + sender;
+						res_list.push(msg.split("/")[1]);
+						replier.reply(msg.split("/")[1] + " 2넴 예약완료");
+
+						break;
+
+					case "3" :
+						boss_3[msg.split("/")[1]] = msg.split("/")[3] + " " + sender;
+						res_list.push(msg.split("/")[1]);
+						replier.reply(msg.split("/")[1] + " 3넴 예약완료");
+
+						break;
+
+					case "4" :
+						boss_4[msg.split("/")[1]] = msg.split("/")[3] + " " + sender;
+						res_list.push(msg.split("/")[1]);
+						replier.reply(msg.split("/")[1] + " 4넴 예약완료");
+
+						break;
+
+					case "5" :
+						boss_5[msg.split("/")[1]] = msg.split("/")[3] + " " + sender;
+						res_list.push(msg.split("/")[1]);
+						replier.reply(msg.split("/")[1] + " 5넴 예약완료");
+
+						break;
+					
+					default:
+						replier.reply("예약실패, 네임드 숫자를 확인해주세요.");
+				}
+			}
+		}
+	}
+
+	//대리 끝 and 취소
+	if (msg.indexOf("!2끝") == 0 || msg.indexOf("!2취소") == 0) {
+		if (msg.split("/")[1] === null || msg.split("/")[1] === undefined) {
+			replier.reply("예약 취소or끝 실패");
+			replier.reply("사용법을 확인해주세요.");
+		} else {
+			var k = 0;
+
+			for(i=0; i<res_list.length; i++){
+				if (res_list[i]==msg.split("/")[1]){
+					k=1;
+				}
+			}
+
+			if (k==1){
+				delete boss_1[msg.split("/")[1]];
+				delete boss_2[msg.split("/")[1]];
+				delete boss_3[msg.split("/")[1]];
+				delete boss_4[msg.split("/")[1]];
+				delete boss_5[msg.split("/")[1]];
+
+				res_list.splice(res_list.indexOf(msg.split("/")[1]),1);
+
+				if (msg.indexOf("!2끝") == 0) {
+					replier.reply(msg.split("/")[1] + " 참전 완료");
+				} else if (msg.indexOf("!2취소") == 0){
+					replier.reply(msg.split("/")[1] + " 예약 취소");
+				}
+			} else {
+				replier.reply("예약이 되어있지 않습니다.");
+			}
+		}
+	}
+
+	// 대리 이월 예약
+	if (msg.indexOf("!2이월예약") == 0) {
+		if (msg.split("/")[1] === null || msg.split("/")[1] === undefined || msg.split("/")[2] === null || msg.split("/")[2] === undefined || msg.split("/")[3] === null || msg.split("/")[3] === undefined) {
+			replier.reply("예약실패");
+			replier.reply("사용법을 확인해주세요.");
+		} else {
+			var u_overlap = 0;
+
+			// 예약 중복 방지
+
+			for (i=0; i<res_list.length; i++){
+				if (res_list[i] == "이월_" + msg.split("/")[1]) {
+					u_overlap = 1;
+				}
+			}
+
+			if (u_overlap == 1) {
+				replier.reply("이미 예약 중입니다.");
+			} else {
+				switch(msg.split("/")[2]) {
+					case "1" :
+						boss_1["이월_" + msg.split("/")[1]] = msg.split("/")[3] + " " + sender;
+						res_list.push("이월_" + msg.split("/")[1]);
+						replier.reply(msg.split("/")[1] + " 1넴 이월예약완료");
+
+						break;
+
+					case "2" :
+						boss_2["이월_" + msg.split("/")[1]] = msg.split("/")[3] + " " + sender;
+						res_list.push("이월_" + msg.split("/")[1]);
+						replier.reply(msg.split("/")[1] + " 2넴 이월예약완료");
+
+						break;
+
+					case "3" :
+						boss_3["이월_" + msg.split("/")[1]] = msg.split("/")[3] + " " + sender;
+						res_list.push("이월_" + msg.split("/")[1]);
+						replier.reply(msg.split("/")[1] + " 3넴 이월예약완료");
+
+						break;
+
+					case "4" :
+						boss_4["이월_" + msg.split("/")[1]] = msg.split("/")[3] + " " + sender;
+						res_list.push("이월_" + msg.split("/")[1]);
+						replier.reply(msg.split("/")[1] + " 4넴 이월예약완료");
+
+						break;
+
+					case "5" :
+						boss_5["이월_" + msg.split("/")[1]] = msg.split("/")[3] + " " + sender;
+						res_list.push("이월_" + msg.split("/")[1]);
+						replier.reply(msg.split("/")[1] + " 5넴 이월예약완료");
+
+						break;
+					
+					default:
+						replier.reply("예약실패, 네임드 숫자를 확인해주세요.");
+				}
+			}
+		}
+	}
+
+	// 대리 이월 끝 and 취소
+	if (msg.indexOf("!2이월끝") == 0 || msg.indexOf("!2이월취소") == 0) {
+		if (msg.split("/")[1] === null || msg.split("/")[1] === undefined) {
+			replier.reply("예약 취소or끝 실패");
+			replier.reply("사용법을 확인해주세요.");
+		} else {
+			var k = 0;
+
+			for(i=0; i<res_list.length; i++){
+				if (res_list[i]=="이월_" + msg.split("/")[1]){
+					k=1;
+				}
+			}
+
+			if (k==1){
+				delete boss_1["이월_" + msg.split("/")[1]];
+				delete boss_2["이월_" + msg.split("/")[1]];
+				delete boss_3["이월_" + msg.split("/")[1]];
+				delete boss_4["이월_" + msg.split("/")[1]];
+				delete boss_5["이월_" + msg.split("/")[1]];
+
+				res_list.splice(res_list.indexOf("이월_" + msg.split("/")[1]),1);
+
+				if (msg.indexOf("!2이월끝") == 0) {
+					replier.reply(msg.split("/")[1] + "이월 참전 완료");
+				} else if (msg.indexOf("!2이월취소") == 0){
+					replier.reply(msg.split("/")[1] + "이월 예약 취소");
+				}
+			} else {
+				replier.reply("예약이 되어있지 않습니다.");
+			}
+		}
+	}
+
+
 }
